@@ -9,6 +9,7 @@ omnivore.kml('Hintergrund.kml').addTo(map);
 omnivore.kml('Linie_Felder.kml').addTo(map);
 omnivore.kml('Spielfeld_Rand.kml').addTo(map);
 
+
 // Tracker-Positionen live abrufen
 async function updateTrackers() {
   const response = await fetch("https://tracki-proxy.onrender.com/api/trackers");
