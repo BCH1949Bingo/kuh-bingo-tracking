@@ -1,29 +1,24 @@
-// Karte initialisieren (wenn nicht schon vorhanden)
-const map = L.map('map').setView([48.45, 10.65], 16); // Koordinaten anpassen
-
-// Hintergrundkarte laden (OSM)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-// ✅ KML-Dateien laden (Pfad muss relativ sein, da die Dateien im GitHub Pages Repo liegen)
-omnivore.kml('Hintergrund.kml').addTo(map);
-omnivore.kml('Linie_Felder.kml').addTo(map);
-omnivore.kml('Spielfeld_Rand.kml').addTo(map);
-
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
   <meta charset="utf-8" />
   <title>Kuh-Bingo Live-Karte</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Eigene Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="map"></div>
+
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet Omnivore zum Laden von KML -->
   <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
+
+  <!-- Eigene JS-Dateien -->
   <script src="config.js"></script>
   <script src="tracker.js"></script>
 </body>
