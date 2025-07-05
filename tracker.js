@@ -4,10 +4,17 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// KML-Dateien laden
-omnivore.kml('Hintergrund.kml').addTo(map);
-omnivore.kml('Linie_Felder.kml').addTo(map);
-omnivore.kml('Spielfeld_Rand.kml').addTo(map);
+['Hintergrund.kml', 'Linie_Felder.kml', 'Spielfeld_Rand.kml'].forEach(file => {
+  omnivore.kml(file)
+    .on('ready', function() {
+      console.log(file + ' erfolgreich geladen ✅');
+    })
+    .on('error', function(e) {
+      console.error('❌ Fehler beim Laden von ' + file, e);
+    })
+    .addTo(map);
+});
+
 
 
 // Tracker-Positionen live abrufen
