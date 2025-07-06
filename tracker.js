@@ -4,8 +4,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 omnivore.kml('spielfeld.kml')
-  .on('ready', () => console.log("✅ spielfeld.kml geladen"))
-  .on('error', (e) => console.error("❌ Fehler beim Laden von spielfeld.kml", e))
+  .on('ready', function() {
+    map.fitBounds(this.getBounds()); // automatisch auf Polygon zoomen
+    console.log("✅ spielfeld.kml geladen");
+  })
+  .on('error', function(e) {
+    console.error("❌ Fehler beim Laden von spielfeld.kml", e);
+  })
   .addTo(map);
 
 const kuhdaten = [
