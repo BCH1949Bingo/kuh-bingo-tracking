@@ -1,21 +1,16 @@
-// 📍 Karte initialisieren
-const map = L.map('map').setView([48.45, 10.65], 17);
+// Leaflet-Karte mit festem Zentrum und Zoomstufe
+const map = L.map('map').setView([48.4507, 10.6535], 18);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-// 🗂️ KML-Datei laden und auf Bereich zoomen
+// ✅ KML-Datei einbinden (Spielfeld)
 omnivore.kml('spielfeld.kml')
-  .on('ready', function() {
-    map.fitBounds(this.getBounds());
-    console.log("✅ spielfeld.kml geladen");
-  })
-  .on('error', function(e) {
-    console.error("❌ Fehler beim Laden von spielfeld.kml", e);
-  })
+  .on('ready', () => console.log("✅ spielfeld.kml geladen"))
+  .on('error', (e) => console.error("❌ Fehler beim Laden von spielfeld.kml", e))
   .addTo(map);
 
-// 🐄 Statische Kuhdaten mit Bildern
+// 🐄 Fixe Kuhpositionen mit Icons
 const kuhdaten = [
   { name: "Moritz", lat: 48.4505, lon: 10.653 },
   { name: "Uli", lat: 48.4508, lon: 10.654 },
@@ -31,7 +26,7 @@ kuhdaten.forEach(k => {
   L.marker([k.lat, k.lon], { icon }).addTo(map).bindPopup(k.name);
 });
 
-// 🌐 Vorbereitung für Trackimo-Live-Tracker (noch deaktiviert)
+// Optional: Live-Tracker vorbereiten
 async function updateTrackers() {
   try {
     const response = await fetch("https://tracki-proxy.onrender.com/api/trackers");
@@ -52,6 +47,6 @@ async function updateTrackers() {
   }
 }
 
-// ✳️ Später aktivieren:
+// Live-Tracker bei Bedarf aktivieren:
 // updateTrackers();
 // setInterval(updateTrackers, 60000);
