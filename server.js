@@ -1,4 +1,4 @@
-// server.js – OAuth2 Authorization Code Flow mit Trackimo
+// server.js – Trackimo OAuth2-Proxy mit korrektem API-Endpunkt
 
 const express = require("express");
 const axios = require("axios");
@@ -21,6 +21,7 @@ const config = {
   redirect_uri: "https://tracki-proxy.onrender.com/callback",
   auth_url: "https://plus.trackimo.com/api/v2/oauth/authorize",
   token_url: "https://plus.trackimo.com/api/v2/oauth/token",
+  account_id: "1448740"
 };
 
 // ✅ Root-Route: Statusanzeige
@@ -28,13 +29,13 @@ app.get("/", (req, res) => {
   res.send("✅ Tracki-Proxy läuft. Bitte zuerst <a href='/auth'>/auth</a> aufrufen.");
 });
 
-// ✅ Schritt 1: Auth starten
+// ✅ Schritt 1: OAuth2-Autorisierung starten
 app.get("/auth", (req, res) => {
   const authUrl = `${config.auth_url}?client_id=${config.client_id}&response_type=code&redirect_uri=${encodeURIComponent(config.redirect_uri)}`;
   res.redirect(authUrl);
 });
 
-// ✅ Schritt 2: Token erhalten
+// ✅ Schritt 2: Callback → Token speichern
 app.get("/callback", async (req, res) => {
   const code = req.query.code;
   try {
@@ -56,7 +57,7 @@ app.get("/callback", async (req, res) => {
   }
 });
 
-// ✅ Live-Tracker abrufen
+// ✅ Tracker-Positionsdaten vom richtigen Endpunkt abrufen
 app.get("/api/trackers", async (req, res) => {
   const token = req.session.token;
   if (!token) {
@@ -64,7 +65,7 @@ app.get("/api/trackers", async (req, res) => {
   }
 
   try {
-    const response = await axios.get("https://plus.trackimo.com/api/v2/devices", {
+    const response = await axios.get(`https://plus.trackimo.com/api/v2/accounts/${config.account_id}/devices/details`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     res.json(response.data);
@@ -74,6 +75,7 @@ app.get("/api/trackers", async (req, res) => {
   }
 });
 
+// ✅ Server starten
 app.listen(port, () => {
   console.log(`🚀 Tracki-Proxy läuft auf Port ${port}`);
 });
